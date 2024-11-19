@@ -1,4 +1,8 @@
 package com.aditya.project.Repository;
 
-public interface DepartmentRepository {
+import com.aditya.project.Model.Department;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface DepartmentRepository extends JpaRepository<Department, Integer> {
 }
+

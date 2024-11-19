@@ -1,4 +1,7 @@
 package com.aditya.project.Repository;
 
-public interface SpecializationRepository {
+import com.aditya.project.Model.Specialization;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface SpecializationRepository extends JpaRepository<Specialization, Integer> {
 }

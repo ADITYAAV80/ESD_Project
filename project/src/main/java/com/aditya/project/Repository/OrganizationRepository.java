@@ -1,4 +1,8 @@
 package com.aditya.project.Repository;
 
-public interface OrganizationRepository {
+import com.aditya.project.Model.Organization;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface OrganizationRepository  extends JpaRepository<Organization, Integer> {
+
 }
