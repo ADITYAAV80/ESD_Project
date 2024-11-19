@@ -6,8 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+//import org.springframework.security.core.GrantedAuthority;
+//import org.springframework.security.core.GrantedAuthority;
+//import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
@@ -41,7 +42,7 @@ public class Employee{
 //        // For simplicity, assuming 'ROLE_USER'. You can add roles based on your requirements.
 //        return java.util.Collections.singletonList(() -> "ROLE_USER");
 //    }
-//
+
 //    @Override
 //    public String getPassword() {
 //        return this.password;

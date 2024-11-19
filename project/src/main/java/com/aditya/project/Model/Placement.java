@@ -22,7 +22,11 @@ public class Placement {
 
     private String profile;
     private String description;
-    private int intake;
-    private int minimum_grade;
+
+    @Column(nullable = true)
+    private Integer intake;
+
+    @Column(nullable = true)
+    private Float minimum_grade;
 
 }
