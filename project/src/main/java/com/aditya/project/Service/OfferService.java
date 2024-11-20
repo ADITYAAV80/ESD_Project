@@ -1,11 +1,15 @@
 package com.aditya.project.Service;
 
 import com.aditya.project.DTO.DomainResponse;
+import com.aditya.project.DTO.LoginRequest;
 import com.aditya.project.DTO.PlacementRequest;
 import com.aditya.project.DTO.SpecializationResponse;
+import com.aditya.project.Encryption.EncryptionService;
 import com.aditya.project.Model.*;
 import com.aditya.project.Repository.*;
+import com.aditya.project.helper.JWTHelper;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 //import org.springframework.security.core.Authentication;
@@ -25,17 +29,24 @@ public class OfferService {
     private final SpecializationRepository specializationRepository;
     private final DomainRepository domainRepository;
     private final PlacementFilterRepository placementFilterRepository;
-
+    private final EmployeeRepository employeeRepository;
+    private final EncryptionService encryptionService;
+    private final JWTHelper jwtHelper;
 
     @Autowired
     public OfferService(PlacementRepository placementRepository,
                         SpecializationRepository specializationRepository,
                         DomainRepository domainRepository,
-                        PlacementFilterRepository placementFilterRepository){//, AuthenticationManager authenticationManager) {
+                        PlacementFilterRepository placementFilterRepository,
+                        EmployeeRepository employeeRepository,
+                        EncryptionService encryptionService, JWTHelper jwtHelper) {
         this.placementRepository = placementRepository;
         this.specializationRepository = specializationRepository;
         this.domainRepository = domainRepository;
         this.placementFilterRepository = placementFilterRepository;
+        this.employeeRepository = employeeRepository;
+        this.encryptionService = encryptionService;
+        this.jwtHelper = jwtHelper;
     }
 
 
@@ -115,6 +126,14 @@ public class OfferService {
                 .collect(Collectors.toList());
     }
 
+    public String loginCustomer(LoginRequest request) {
+
+        Employee employee = employeeRepository.findByUsername(request.username());
+        if(!encryptionService.validates(request.password(), employee.getPassword())) {
+            return "Incorrect email or password";
+        }
+        return jwtHelper.generateToken(request.username());
+    }
 //    @Autowired
 //    AuthenticationManager authManager;
 //

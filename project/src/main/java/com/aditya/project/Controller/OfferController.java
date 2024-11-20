@@ -1,11 +1,17 @@
 package com.aditya.project.Controller;
 
 import com.aditya.project.DTO.DomainResponse;
+import com.aditya.project.DTO.LoginRequest;
 import com.aditya.project.DTO.PlacementRequest;
 import com.aditya.project.DTO.SpecializationResponse;
 import com.aditya.project.Model.*;
 import com.aditya.project.Service.OfferService;
+import com.aditya.project.helper.JWTHelper;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
@@ -19,37 +25,48 @@ import java.util.stream.Stream;
 public class OfferController {
 
     public final OfferService service; // Make the field final to enforce proper initialization.
+    public final JWTHelper jwtHelper;
 
     @Autowired
-    public OfferController(OfferService service) {
+    public OfferController(OfferService service,JWTHelper jwtHelper) {
         this.service = service; // Correctly assign the parameter to the field.
+        this.jwtHelper = jwtHelper;
     }
 
     @PostMapping("/submit")
-    public String getOffers(@RequestBody PlacementRequest request){
+    public ResponseEntity<String> getOffers(@RequestBody PlacementRequest request, HttpServletRequest req){
+
+        if(!jwtHelper.validateAuthorizationHeader(req.getHeader("Authorization"))){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
         PlacementFilter savedPlacement = service.savePlacementAndFilter(request);
-        return "Placement saved with ID: " + savedPlacement.getId();
+        return ResponseEntity.ok("Placement saved with ID: " + savedPlacement.getId());
     }
 
-        @GetMapping("/api/specialization")
-        public List<SpecializationResponse> getSpecializations() {
-        // Creating some dummy specialization data
-            return service.getspecializations();
+    @GetMapping("/api/specialization")
+    public ResponseEntity<List<SpecializationResponse>> getSpecializations(HttpServletRequest req) {
+        if(!jwtHelper.validateAuthorizationHeader(req.getHeader("Authorization"))){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
+        return ResponseEntity.ok(service.getspecializations());
+    }
 
     @GetMapping("api/domain")
-        public List<DomainResponse> getDomains() {
-            // Logic for fetching domains
-        return service.getDomains();
+        public ResponseEntity<List<DomainResponse>> getDomains(HttpServletRequest req) {
+        if(!jwtHelper.validateAuthorizationHeader(req.getHeader("Authorization"))){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+        return ResponseEntity.ok(service.getDomains());
     }
 
-//    @PostMapping("/login")
-//    public String login(@RequestBody Employee employee){
-//        return service.verify(employee);
-//    }
 
     @GetMapping("/")
-    public List<Placement> showOffers() {
-        return service.getOffers(); // Accessing the properly initialized service.
+    public ResponseEntity<List<Placement>> showOffers(HttpServletRequest req) {
+        if(!jwtHelper.validateAuthorizationHeader(req.getHeader("Authorization"))){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+        return ResponseEntity.ok(service.getOffers()); // Accessing the properly initialized service.
     }
+
+
 }
