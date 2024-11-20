@@ -15,7 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.security.core.Authentication;
 //import org.springframework.security.authentication.AuthenticationManager;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 
 import java.util.List;
@@ -129,8 +131,9 @@ public class OfferService {
     public String loginCustomer(LoginRequest request) {
 
         Employee employee = employeeRepository.findByUsername(request.username());
-        if(!encryptionService.validates(request.password(), employee.getPassword())) {
-            return "Incorrect email or password";
+        if (employee == null || !encryptionService.validates(request.password(), employee.getPassword())) {
+            // Return an error message with 401 status
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Incorrect email or password");
         }
         return jwtHelper.generateToken(request.username());
     }
