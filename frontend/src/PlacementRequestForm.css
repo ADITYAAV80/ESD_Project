@@ -1,0 +1,117 @@
+/* Global Styles */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #222;
+  color: #fff;
+  padding: 0;
+  background-image: url("https://images.unsplash.com/photo-1572297851974-c5fd885b105a?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+}
+
+.container {
+  padding: 20px;
+  margin-top: 60px;
+}
+
+form {
+  width: 90%;
+  max-width: 900px;
+  margin: 20px auto;
+  background-color: #333;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.formheading {
+  text-align: center;
+  color: white;
+  margin-bottom: 10px;
+}
+
+.logout-button {
+  position: absolute;
+  margin-left: 50%;
+  width: 200px;
+  background-color: #ff4c4c;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.logout-button:hover {
+  background-color: #e03a3a;
+}
+
+.labels {
+  display: block;
+  margin: 10px 0 5px;
+  font-size: 14px;
+}
+
+textarea {
+  height: 100px;
+  width: 100%;
+
+  background-color: black;
+}
+
+textarea {
+  width: 100%;
+  height: 100px;
+  background-color: black;
+  color: white;
+  padding: 10px;
+  border: 1px solid white; /* Matches the subtle border styling */
+  border-radius: 5px; /* Consistent with other input elements */
+  font-size: 14px; /* Matches font size of other input elements */
+  outline: none; /* Removes default focus outline */
+}
+
+.select {
+  background-color: #444;
+  color: black;
+  width: 100%;
+}
+
+option {
+  font-size: 20px;
+  text-transform: uppercase;
+}
+
+button[type="submit"] {
+  width: 100%;
+  padding: 15px;
+  background-color: #ff4c4c;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+button[type="submit"]:hover {
+  background-color: #e03a3a;
+}
+
+p {
+  text-align: center;
+  font-size: 16px;
+  color: #ff4c4c;
+}
+
+@media (max-width: 768px) {
+  form {
+    width: 95%;
+    margin: 20px auto;
+  }
+
+  .logout-button {
+    top: 10px;
+    right: 10px;
+    padding: 8px 16px;
+  }
+}
