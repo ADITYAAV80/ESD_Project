@@ -1,7 +1,12 @@
+// components/PlacementRequestForm/PlacementRequestForm.jsx
 import React, { useState, useEffect } from "react";
-import axios from "axios";
-import "./PlacementRequestForm.css";
+import {
+  getSpecializations,
+  getDomains,
+  submitPlacementRequest,
+} from "./../utils/api";
 import Select from "react-select";
+import "./PlacementRequestForm.css";
 
 export default function PlacementRequestForm() {
   const [organization, setOrganization] = useState("");
@@ -17,9 +22,8 @@ export default function PlacementRequestForm() {
   const [isResponseVisible, setIsResponseVisible] = useState(false);
 
   const handleResponseMessage = (message) => {
-    {
-      isResponseVisible && <p>{responseMessage}</p>;
-    }
+    setIsResponseVisible(true);
+    setResponseMessage(message);
 
     // Hide the message after 5 seconds
     setTimeout(() => {
@@ -34,32 +38,15 @@ export default function PlacementRequestForm() {
       return;
     }
 
-    axios
-      .get("http://localhost:8080/api/specialization", {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((response) => {
-        const options = response.data.map((spec) => ({
-          value: spec.specialization_id,
-          label: `${spec.code} - ${spec.name}`,
-        }));
-        setSpecializations(options);
-      })
+    // Fetch specializations and domains using utility functions
+    getSpecializations(token)
+      .then((specializations) => setSpecializations(specializations))
       .catch((error) => {
         console.error("Error fetching specializations:", error);
       });
 
-    axios
-      .get("http://localhost:8080/api/domain", {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((response) => {
-        const options = response.data.map((domain) => ({
-          value: domain.domain_id,
-          label: `${domain.program} - ${domain.batch}`,
-        }));
-        setDomains(options);
-      })
+    getDomains(token)
+      .then((domains) => setDomains(domains))
       .catch((error) => {
         console.error("Error fetching domains:", error);
       });
@@ -71,11 +58,23 @@ export default function PlacementRequestForm() {
     const token = localStorage.getItem("token");
     if (!token) {
       setResponseMessage("You are not authenticated.");
+      setIsResponseVisible(true);
       return;
     }
 
     if (!organization || !profile || !description) {
-      setResponseMessage("Please fill out all required fields");
+      setResponseMessage("Please fill out all required fields.");
+      setIsResponseVisible(true);
+      return;
+    }
+
+    const parsedIntake = parseInt(intake);
+    const parsedMinimumGrade = parseFloat(minimumGrade);
+
+    // CGPA validation
+    if (parsedMinimumGrade < 0 || parsedMinimumGrade > 4) {
+      setResponseMessage("Minimum Grade (CGPA) must be between 0 and 4.");
+      setIsResponseVisible(true);
       return;
     }
 
@@ -83,28 +82,40 @@ export default function PlacementRequestForm() {
       organization,
       profile,
       description,
-      intake: parseInt(intake),
-      minimumGrade: parseFloat(minimumGrade),
+      intake: parsedIntake,
+      minimumGrade: parsedMinimumGrade,
       specialization_id: specializationIds.map((id) => parseInt(id.value)),
       domain_id: domainIds.map((id) => parseInt(id.value)),
     };
 
-    axios
-      .post("http://localhost:8080/submit", placementRequest, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+    submitPlacementRequest(placementRequest, token)
       .then(() => {
         setResponseMessage("Placement request submitted successfully!");
+        setIsResponseVisible(true);
+
+        // Reset form fields
+        setOrganization("");
+        setProfile("");
+        setDescription("");
+        setIntake("");
+        setMinimumGrade("");
+        setSpecializationIds([]);
+        setDomainIds([]);
       })
       .catch((error) => {
-        console.log(error);
-        if (error.status === 401) {
-          localStorage.removeItem("token"); // Remove token from storage
-          window.location.href = "/login"; // Redirect to the login page
+        if (error.response && error.response.status === 401) {
+          handleLogout();
         }
         console.error("Error submitting placement request:", error);
         setResponseMessage("Failed to submit placement request.");
+        setIsResponseVisible(true);
       });
+
+    // Hide the response message after 5 seconds
+    setTimeout(() => {
+      setIsResponseVisible(false);
+      setResponseMessage("");
+    }, 5000);
   };
 
   const handleLogout = () => {

@@ -1,6 +1,7 @@
+// components/LoginPage/LoginPage.jsx
 import React, { useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom"; // Import useNavigate for redirection
+import { loginUser } from "./../utils/api";
 import "./LoginPage.css";
 
 export default function LoginPage() {
@@ -29,19 +30,13 @@ export default function LoginPage() {
 
     console.log(send_info);
 
-    // Send login request to backend
-    axios
-      .post("http://localhost:8080/login", send_info, {
-        headers: {
-          "Content-Type": "application/json", // Indicate that the data is JSON
-        },
-      })
-      .then((response) => {
+    // Call the login API function from utils/api.js
+    loginUser(send_info)
+      .then((token) => {
         setIsLoading(false);
-        // Assuming the response contains a JWT token
-        localStorage.setItem("token", response.data); // Store token in localStorage
+        localStorage.setItem("token", token); // Store token in localStorage
         setResponseMessage("Login successful!");
-        console.log("response", response.data);
+        console.log("response", token);
         navigate("/placement"); // Redirect to placement page
       })
       .catch((error) => {

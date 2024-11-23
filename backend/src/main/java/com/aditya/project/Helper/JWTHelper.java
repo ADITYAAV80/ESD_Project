@@ -18,7 +18,7 @@ public class JWTHelper {
     private final String SECRET_KEY = "some random text secret bhuhu hihihih";
 
     //2 hours
-    private final long EXPIRATION_TIME = 1000 * 60;
+    private final long EXPIRATION_TIME = 1000 * 60 * 60 *2;
 
     //converts secret key into byte array
     private SecretKey getSigningKey() {

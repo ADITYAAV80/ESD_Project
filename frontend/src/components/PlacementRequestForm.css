@@ -1,10 +1,12 @@
-/* Global Styles */
 body {
   font-family: Arial, sans-serif;
   background-color: #222;
   color: #fff;
   padding: 0;
   background-image: url("https://images.unsplash.com/photo-1572297851974-c5fd885b105a?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+  background-size: cover; /* Ensures the image covers the entire background */
+  background-position: center; /* Keeps the image centered */
+  background-repeat: no-repeat; /* Prevents the image from repeating */
 }
 
 .container {
@@ -101,6 +103,17 @@ p {
   text-align: center;
   font-size: 16px;
   color: #ff4c4c;
+}
+
+.response-message {
+  background-color: #ff4c4c;
+  color: white;
+  text-align: center;
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: bold;
 }
 
 @media (max-width: 768px) {
