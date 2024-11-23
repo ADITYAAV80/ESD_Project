@@ -7,23 +7,23 @@ import com.aditya.project.DTO.SpecializationResponse;
 import com.aditya.project.Encryption.EncryptionService;
 import com.aditya.project.Model.*;
 import com.aditya.project.Repository.*;
-import com.aditya.project.helper.JWTHelper;
+import com.aditya.project.Helper.JWTHelper;
+import com.aditya.project.Utility.InvalidCredentialsException;
+import com.aditya.project.Utility.NullFieldsException;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.validation.constraints.Null;
+import lombok.AllArgsConstructor;
 //import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 //import org.springframework.security.core.Authentication;
 //import org.springframework.security.authentication.AuthenticationManager;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
+@AllArgsConstructor
 @Service
 public class OfferService {
 
@@ -35,27 +35,30 @@ public class OfferService {
     private final EncryptionService encryptionService;
     private final JWTHelper jwtHelper;
 
-    @Autowired
-    public OfferService(PlacementRepository placementRepository,
-                        SpecializationRepository specializationRepository,
-                        DomainRepository domainRepository,
-                        PlacementFilterRepository placementFilterRepository,
-                        EmployeeRepository employeeRepository,
-                        EncryptionService encryptionService, JWTHelper jwtHelper) {
-        this.placementRepository = placementRepository;
-        this.specializationRepository = specializationRepository;
-        this.domainRepository = domainRepository;
-        this.placementFilterRepository = placementFilterRepository;
-        this.employeeRepository = employeeRepository;
-        this.encryptionService = encryptionService;
-        this.jwtHelper = jwtHelper;
-    }
-
-
+//    @Autowired
+//    public OfferService(PlacementRepository placementRepository,
+//                        SpecializationRepository specializationRepository,
+//                        DomainRepository domainRepository,
+//                        PlacementFilterRepository placementFilterRepository,
+//                        EmployeeRepository employeeRepository,
+//                        EncryptionService encryptionService, JWTHelper jwtHelper) {
+//        this.placementRepository = placementRepository;
+//        this.specializationRepository = specializationRepository;
+//        this.domainRepository = domainRepository;
+//        this.placementFilterRepository = placementFilterRepository;
+//        this.employeeRepository = employeeRepository;
+//        this.encryptionService = encryptionService;
+//        this.jwtHelper = jwtHelper;
+//    }
 
     @Transactional
     public PlacementFilter savePlacementAndFilter(PlacementRequest request) {
         // Fetch all Specialization and Domain objects based on their IDs
+        if(request.organization()==null|| request.profile()==null|| request.description()==null){
+            throw new NullFieldsException("Invalid credentials");
+        }
+
+
         List<Specialization> specializations = request.specialization_id() == null || request.specialization_id().isEmpty()
                 ? null
                 : specializationRepository.findAllById(request.specialization_id());
@@ -132,8 +135,10 @@ public class OfferService {
 
         Employee employee = employeeRepository.findByUsername(request.username());
         if (employee == null || !encryptionService.validates(request.password(), employee.getPassword())) {
+
+            throw new InvalidCredentialsException("Incorrect email or password");//Passing to Global Exception
             // Return an error message with 401 status
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Incorrect email or password");
+            //throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Incorrect email or password");
         }
         return jwtHelper.generateToken(request.username());
     }

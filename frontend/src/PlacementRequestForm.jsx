@@ -97,6 +97,11 @@ export default function PlacementRequestForm() {
         setResponseMessage("Placement request submitted successfully!");
       })
       .catch((error) => {
+        console.log(error);
+        if (error.status === 401) {
+          localStorage.removeItem("token"); // Remove token from storage
+          window.location.href = "/login"; // Redirect to the login page
+        }
         console.error("Error submitting placement request:", error);
         setResponseMessage("Failed to submit placement request.");
       });
