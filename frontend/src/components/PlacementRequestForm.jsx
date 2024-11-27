@@ -69,7 +69,35 @@ export default function PlacementRequestForm() {
     }
 
     const parsedIntake = parseInt(intake);
+    console.log(parsedIntake);
     const parsedMinimumGrade = parseFloat(minimumGrade);
+
+    if (intake.length >= 1 && isNaN(parsedIntake)) {
+      setResponseMessage("Please enter a valid number.");
+      setIsResponseVisible(true);
+      return;
+    }
+
+    if (minimumGrade.length >= 1 && isNaN(parsedMinimumGrade)) {
+      setResponseMessage("Please enter a valid number.");
+      setIsResponseVisible(true);
+      return;
+    }
+
+    if (parsedIntake < 1) {
+      setResponseMessage("Minimum intake must be 1.");
+      setIsResponseVisible(true);
+      return;
+    }
+
+    if (parsedIntake > 99999) {
+      console.log("Here inside");
+      setResponseMessage(
+        "Intake cannot be greater than no of people in college"
+      );
+      setIsResponseVisible(true);
+      return;
+    }
 
     // CGPA validation
     if (parsedMinimumGrade < 0 || parsedMinimumGrade > 4) {

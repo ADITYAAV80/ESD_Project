@@ -4,9 +4,9 @@ INSERT INTO department (department_id, name, capacity) VALUES
 
 -- Inserting data into Employee table
 INSERT INTO employee (employee_id, username, password,email,title, department) VALUES
-(1, 'rajan', 'rajan','rajan@gmail.com','Outreach Officer', 1),
-(2, 'pralay', 'pralay','pralay@gmail','Outreach Officer', 1),
-(3, 'nikhil', 'nikhil', 'nikhil@gmail.com','Student Placement officer',1);
+(1, 'rajan', 'rajan123!','rajan@gmail.com','Outreach Officer', 1),
+(2, 'pralay', 'pralay123!','pralay@gmail','Outreach Officer', 1),
+(3, 'nikhil', 'nikhil123!', 'nikhil@gmail.com','Student Placement officer',1);
 
 -- Inserting data into Domain table
 INSERT INTO domain (domain_id, program, batch, capacity, qualification) VALUES

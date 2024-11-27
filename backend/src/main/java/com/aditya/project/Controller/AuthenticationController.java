@@ -16,7 +16,7 @@ public class AuthenticationController {
     private final OfferService offerService; //linking from service layer
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<String> login(@Valid @RequestBody LoginRequest request) {
         try {
             // This will throw an exception if login fails
             String token = offerService.loginCustomer(request);

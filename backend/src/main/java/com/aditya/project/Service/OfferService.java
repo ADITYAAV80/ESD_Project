@@ -11,6 +11,7 @@ import com.aditya.project.Helper.JWTHelper;
 import com.aditya.project.Utility.InvalidCredentialsException;
 import com.aditya.project.Utility.NullFieldsException;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Null;
 import lombok.AllArgsConstructor;
 //import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -52,7 +53,7 @@ public class OfferService {
 //    }
 
     @Transactional
-    public PlacementFilter savePlacementAndFilter(PlacementRequest request) {
+    public PlacementFilter savePlacementAndFilter(@Valid PlacementRequest request) {
         // Fetch all Specialization and Domain objects based on their IDs
         if(request.organization()==null|| request.profile()==null|| request.description()==null){
             throw new NullFieldsException("Invalid credentials");
@@ -131,7 +132,7 @@ public class OfferService {
                 .collect(Collectors.toList());
     }
 
-    public String loginCustomer(LoginRequest request) {
+    public String loginCustomer(@Valid LoginRequest request) {
 
         Employee employee = employeeRepository.findByUsername(request.username());
         if (employee == null || !encryptionService.validates(request.password(), employee.getPassword())) {

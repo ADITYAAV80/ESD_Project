@@ -7,6 +7,7 @@ import com.aditya.project.Model.*;
 import com.aditya.project.Service.OfferService;
 import com.aditya.project.Helper.JWTHelper;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +31,7 @@ public class OfferController {
 //    } //this is essentially linking since they don't belong in the same class
 
     @PostMapping("/submit")
-    public ResponseEntity<String> getOffers(@RequestBody PlacementRequest request, HttpServletRequest req){
+    public ResponseEntity<String> getOffers(@Valid @RequestBody PlacementRequest request, HttpServletRequest req){
 
         // basically you are checking for jwt token if it is valid you are allowing it else you are rejecting it
         if(!jwtHelper.validateAuthorizationHeader(req.getHeader("Authorization"))){
