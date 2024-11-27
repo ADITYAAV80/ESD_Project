@@ -50,7 +50,7 @@ public class JWTHelper {
             claims = Jwts.parserBuilder() // Use parserBuilder()
                     .setSigningKey(getSigningKey()) // Set the signing key
                     .build() // Build the parser
-                    .parseClaimsJws(token) // Parse the JWS
+                    .parseClaimsJws(token) // Parse the JWS [interesting it actually checks for expiration as well hence try catch blocks to deal with user logout]
                     .getBody();
         } catch (Exception e) {
             return null;
@@ -69,7 +69,7 @@ public class JWTHelper {
         return extractClaims(token) != null ? extractExpiration(token).before(new Date()) : false;
     }
 
-    //validate
+    //validate token expiry
     public Boolean validateToken(String token) {
         return !isTokenExpired(token);
     }
@@ -80,7 +80,7 @@ public class JWTHelper {
             return false;
         }
         String token = authorizationHeader.substring(7);
-        String email = extractUsername(token);
-        return email != null && validateToken(token);
+        String user = extractUsername(token);
+        return user != null && validateToken(token);
     }
 }

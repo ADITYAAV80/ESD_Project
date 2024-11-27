@@ -7,6 +7,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 
+//to check whenever if a new request comes if it contains JWT and if it's not expired
+
 @Component
 @RequiredArgsConstructor
 public class RequestInterceptor implements HandlerInterceptor {
@@ -20,7 +22,7 @@ public class RequestInterceptor implements HandlerInterceptor {
 
         String authorizationHeader = request.getHeader("Authorization");
 
-        //check if header is null or  it doesn't start with Bearer
+        //check if header is null, or  it doesn't start with Bearer
         if(authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return false;
@@ -28,7 +30,7 @@ public class RequestInterceptor implements HandlerInterceptor {
         String token = authorizationHeader.substring(7);
         String username = jwtHelper.extractUsername(token);
 
-        //validate token
+        //validate token-->token expired->extract claims-->logout
         if(username == null || !jwtHelper.validateToken(token)) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return false;

@@ -13,7 +13,7 @@ public class EncryptionService {
     //I have set encoder as no encoder by updating in security config
     private final PasswordEncoder passwordEncoder;
 
-    //it doesn't encode anything if we want to encode we can use it in when doing Create, Update not used anywhere
+    //it doesn't encode anything if we want to encode we can use it in when doing Create, it's not used anywhere
     public String encode(String password) {
         return passwordEncoder.encode(password);
     }
