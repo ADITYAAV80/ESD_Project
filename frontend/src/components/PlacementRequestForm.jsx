@@ -69,7 +69,6 @@ export default function PlacementRequestForm() {
     }
 
     const parsedIntake = parseInt(intake);
-    console.log(parsedIntake);
     const parsedMinimumGrade = parseFloat(minimumGrade);
 
     if (intake.length >= 1 && isNaN(parsedIntake)) {
@@ -152,108 +151,108 @@ export default function PlacementRequestForm() {
   };
 
   return (
-    <div className="container">
-      <button className="logout-button" onClick={handleLogout}>
-        Logout
-      </button>
+    <>
+      <div className="container">
+        <button className="logout-button" onClick={handleLogout}>
+          Logout
+        </button>
+        {responseMessage && <p>{responseMessage}</p>}
 
-      {responseMessage && <p>{responseMessage}</p>}
+        <h1 className="formheading">Submit Placement Request</h1>
+        <form onSubmit={handleSubmit}>
+          <label className="labels" htmlFor="organization">
+            Organization:
+          </label>
+          <input
+            type="text"
+            id="organization"
+            value={organization}
+            onChange={(e) => setOrganization(e.target.value)}
+          />
+          <br />
 
-      <h1 className="formheading">Submit Placement Request</h1>
-      <form onSubmit={handleSubmit}>
-        <label className="labels" htmlFor="organization">
-          Organization:
-        </label>
-        <input
-          type="text"
-          id="organization"
-          value={organization}
-          onChange={(e) => setOrganization(e.target.value)}
-        />
-        <br />
+          <label className="labels" htmlFor="profile">
+            Profile:
+          </label>
+          <input
+            type="text"
+            id="profile"
+            value={profile}
+            onChange={(e) => setProfile(e.target.value)}
+          />
+          <br />
 
-        <label className="labels" htmlFor="profile">
-          Profile:
-        </label>
-        <input
-          type="text"
-          id="profile"
-          value={profile}
-          onChange={(e) => setProfile(e.target.value)}
-        />
-        <br />
+          <label className="labels" htmlFor="description">
+            Description:
+          </label>
+          <textarea
+            id="description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
+          <br />
 
-        <label className="labels" htmlFor="description">
-          Description:
-        </label>
-        <textarea
-          id="description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
-        <br />
+          <label className="labels" htmlFor="intake">
+            Intake:
+          </label>
+          <input
+            type="text"
+            id="intake"
+            value={intake}
+            onChange={(e) => setIntake(e.target.value)}
+            onBlur={() => {
+              if (isNaN(intake)) {
+                setIntake("");
+              }
+            }}
+          />
+          <br />
 
-        <label className="labels" htmlFor="intake">
-          Intake:
-        </label>
-        <input
-          type="text"
-          id="intake"
-          value={intake}
-          onChange={(e) => setIntake(e.target.value)}
-          onBlur={() => {
-            if (isNaN(intake)) {
-              setIntake("");
-            }
-          }}
-        />
-        <br />
+          <label className="labels" htmlFor="minimumGrade">
+            Minimum Grade:
+          </label>
+          <input
+            type="text"
+            id="minimumGrade"
+            value={minimumGrade}
+            onChange={(e) => setMinimumGrade(e.target.value)}
+          />
+          <br />
 
-        <label className="labels" htmlFor="minimumGrade">
-          Minimum Grade:
-        </label>
-        <input
-          type="text"
-          id="minimumGrade"
-          value={minimumGrade}
-          onChange={(e) => setMinimumGrade(e.target.value)}
-        />
-        <br />
+          <label className="labels" htmlFor="specialization_ids">
+            Specializations:
+          </label>
+          <Select
+            className="select"
+            id="specialization_ids"
+            isMulti
+            options={specializations}
+            value={specializationIds}
+            onChange={setSpecializationIds}
+            styles={{
+              control: (styles) => ({ ...styles, backgroundColor: "black" }),
+            }}
+          />
+          <br />
 
-        <label className="labels" htmlFor="specialization_ids">
-          Specializations:
-        </label>
-        <Select
-          className="select"
-          id="specialization_ids"
-          isMulti
-          options={specializations}
-          value={specializationIds}
-          onChange={setSpecializationIds}
-          styles={{
-            control: (styles) => ({ ...styles, backgroundColor: "black" }),
-          }}
-        />
-        <br />
-
-        <label className="labels" htmlFor="domain_ids">
-          Domains:
-        </label>
-        <Select
-          className="select"
-          id="domain_ids"
-          isMulti
-          options={domains}
-          value={domainIds}
-          onChange={setDomainIds}
-          styles={{
-            control: (styles) => ({ ...styles, backgroundColor: "black" }),
-          }}
-        />
-        <br />
-
-        <button type="submit">Submit</button>
-      </form>
-    </div>
+          <label className="labels" htmlFor="domain_ids">
+            Domains:
+          </label>
+          <Select
+            className="select"
+            id="domain_ids"
+            isMulti
+            options={domains}
+            value={domainIds}
+            onChange={setDomainIds}
+            styles={{
+              control: (styles) => ({ ...styles, backgroundColor: "black" }),
+            }}
+          />
+          <br />
+          <button type="submit">Submit</button>
+        </form>
+      </div>
+    </>
   );
 }

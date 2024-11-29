@@ -28,15 +28,13 @@ export default function LoginPage() {
       password: password,
     };
 
-    console.log(send_info);
-
-    // Call the login API function from utils/api.js
+    //Call the login API function from utils/api.js
     loginUser(send_info)
       .then((token) => {
         setIsLoading(false);
         localStorage.setItem("token", token); // Store token in localStorage
         setResponseMessage("Login successful!");
-        console.log("response", token);
+        //console.log("response", token);
         navigate("/placement"); // Redirect to placement page
       })
       .catch((error) => {
